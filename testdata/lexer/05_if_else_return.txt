@@ -1,0 +1,7 @@
+let x = 5;
+let some_var = 5;
+if (some_var < x) {
+    return some_var;
+} else {
+    return x;
+}
