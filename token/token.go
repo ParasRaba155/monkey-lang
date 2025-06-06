@@ -15,6 +15,7 @@ const (
 	BANG
 	LT
 	GT
+	PERCENT
 	// two char operators
 	EQ
 	NOT_EQ
@@ -22,6 +23,15 @@ const (
 	GTE
 	LSHIFT
 	RSHIFT
+	// two char assignment operator
+	PLUS_EQUAL
+	MINUS_EQUAL
+	MULTIPLY_EQUAL
+	DIVIDE_EQUAL
+	MODULO_EQUAL
+	// incr & decr
+	INCREMENT
+	DECREMENT
 	// Delimiters
 	COMMA
 	SEMICOLON

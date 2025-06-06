@@ -76,17 +76,15 @@ func (l *Lexer) NextToken() token.Token {
 	case '=':
 		return l.readEqualToken()
 	case '+':
-		tok = newToken(token.PLUS, l.char)
-		l.readChar()
+		return l.readPlusToken()
 	case '-':
-		tok = newToken(token.HYPHEN, l.char)
-		l.readChar()
+		return l.readHyphenToken()
 	case '*':
-		tok = newToken(token.ASTERISK, l.char)
-		l.readChar()
+		return l.readAsterickToken()
 	case '/':
-		tok = newToken(token.SLASH, l.char)
-		l.readChar()
+		return l.readSlashToken()
+	case '%':
+		return l.readPercentToken()
 	case '!':
 		return l.readBangToken()
 	case '<':
@@ -173,6 +171,38 @@ func (l *Lexer) readGreaterThanToken() token.Token {
 	return l.readTwoCharToken(token.GT, map[rune]token.Type{
 		'=': token.GTE,
 		'>': token.RSHIFT,
+	})
+}
+
+func (l *Lexer) readPlusToken() token.Token {
+	return l.readTwoCharToken(token.PLUS, map[rune]token.Type{
+		'+': token.INCREMENT,
+		'=': token.PLUS_EQUAL,
+	})
+}
+
+func (l *Lexer) readHyphenToken() token.Token {
+	return l.readTwoCharToken(token.HYPHEN, map[rune]token.Type{
+		'-': token.DECREMENT,
+		'=': token.MINUS_EQUAL,
+	})
+}
+
+func (l *Lexer) readAsterickToken() token.Token {
+	return l.readTwoCharToken(token.ASTERISK, map[rune]token.Type{
+		'=': token.MULTIPLY_EQUAL,
+	})
+}
+
+func (l *Lexer) readSlashToken() token.Token {
+	return l.readTwoCharToken(token.SLASH, map[rune]token.Type{
+		'=': token.DIVIDE_EQUAL,
+	})
+}
+
+func (l *Lexer) readPercentToken() token.Token {
+	return l.readTwoCharToken(token.PERCENT, map[rune]token.Type{
+		'=': token.MODULO_EQUAL,
 	})
 }
 
