@@ -151,88 +151,46 @@ func (l *Lexer) readComplexToken() token.Token {
 }
 
 func (l *Lexer) readEqualToken() token.Token {
-	if l.peakChar() != '=' {
-		tok := newToken(token.ASSIGN, l.char)
-		l.readChar()
-		return tok
-	}
-	ch := l.char
-	l.readChar()
-	tok := token.Token{
-		Type:    token.EQ,
-		Literal: string([]rune{ch, l.char}),
-	}
-	l.readChar()
-	return tok
+	return l.readTwoCharToken(token.ASSIGN, map[rune]token.Type{
+		'=': token.EQ,
+	})
 }
 
 func (l *Lexer) readBangToken() token.Token {
-	if l.peakChar() != '=' {
-		tok := newToken(token.BANG, l.char)
-		l.readChar()
-		return tok
-	}
-	ch := l.char
-	l.readChar()
-	tok := token.Token{
-		Type:    token.NOT_EQ,
-		Literal: string([]rune{ch, l.char}),
-	}
-	l.readChar()
-	return tok
+	return l.readTwoCharToken(token.BANG, map[rune]token.Type{
+		'=': token.NOT_EQ,
+	})
 }
 
 func (l *Lexer) readLessThanToken() token.Token {
-	nextChar := l.peakChar()
-	if nextChar != '=' && nextChar != '<' {
-		tok := newToken(token.LT, l.char)
-		l.readChar()
-		return tok
-	}
-
-	if nextChar == '=' {
-		ch := l.char
-		l.readChar()
-		tok := token.Token{
-			Type:    token.LTE,
-			Literal: string([]rune{ch, l.char}),
-		}
-		l.readChar()
-		return tok
-	}
-
-	ch := l.char
-	l.readChar()
-	tok := token.Token{
-		Type:    token.LSHIFT,
-		Literal: string([]rune{ch, l.char}),
-	}
-	l.readChar()
-	return tok
+	return l.readTwoCharToken(token.LT, map[rune]token.Type{
+		'=': token.LTE,
+		'<': token.LSHIFT,
+	})
 }
 
 func (l *Lexer) readGreaterThanToken() token.Token {
-	nextChar := l.peakChar()
-	if nextChar != '=' && nextChar != '>' {
-		tok := newToken(token.GT, l.char)
-		l.readChar()
-		return tok
-	}
-	if nextChar == '=' {
-		ch := l.char
-		l.readChar()
-		tok := token.Token{
-			Type:    token.GTE,
-			Literal: string([]rune{ch, l.char}),
-		}
-		l.readChar()
-		return tok
-	}
+	return l.readTwoCharToken(token.GT, map[rune]token.Type{
+		'=': token.GTE,
+		'>': token.RSHIFT,
+	})
+}
 
+// readTwoCharToken takes a fallback `singleCharType`
+// it peaks the next char and if its in the mapping then returns the associated token type
+// and if it does not then falls back to singleCharType
+func (l *Lexer) readTwoCharToken(singleCharType token.Type, mappings map[rune]token.Type) token.Token {
+	peek := l.peakChar()
+	tokenType, ok := mappings[peek]
+	if !ok {
+		tok := newToken(singleCharType, l.char)
+		l.readChar()
+		return tok
+	}
 	ch := l.char
 	l.readChar()
 	tok := token.Token{
-		Type:    token.RSHIFT,
+		Type:    tokenType,
 		Literal: string([]rune{ch, l.char}),
 	}
 	l.readChar()
