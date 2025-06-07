@@ -91,6 +91,10 @@ func (l *Lexer) NextToken() token.Token {
 		return l.readLessThanToken()
 	case '>':
 		return l.readGreaterThanToken()
+	case '&':
+		return l.readAmpersandnToken()
+	case '|':
+		return l.readPipeToken()
 	default:
 		return l.readComplexToken()
 	}
@@ -203,6 +207,20 @@ func (l *Lexer) readSlashToken() token.Token {
 func (l *Lexer) readPercentToken() token.Token {
 	return l.readTwoCharToken(token.PERCENT, map[rune]token.Type{
 		'=': token.MODULO_EQUAL,
+	})
+}
+
+func (l *Lexer) readAmpersandnToken() token.Token {
+	return l.readTwoCharToken(token.AMPERSAND, map[rune]token.Type{
+		'=': token.BINARY_AND_EQUAL,
+		'&': token.AND,
+	})
+}
+
+func (l *Lexer) readPipeToken() token.Token {
+	return l.readTwoCharToken(token.PIPE, map[rune]token.Type{
+		'=': token.BINARY_OR_EQUAL,
+		'|': token.OR,
 	})
 }
 

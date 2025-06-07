@@ -16,6 +16,8 @@ const (
 	LT
 	GT
 	PERCENT
+	AMPERSAND
+	PIPE
 	// two char operators
 	EQ
 	NOT_EQ
@@ -23,12 +25,16 @@ const (
 	GTE
 	LSHIFT
 	RSHIFT
+	AND
+	OR
 	// two char assignment operator
 	PLUS_EQUAL
 	MINUS_EQUAL
 	MULTIPLY_EQUAL
 	DIVIDE_EQUAL
 	MODULO_EQUAL
+	BINARY_AND_EQUAL
+	BINARY_OR_EQUAL
 	// incr & decr
 	INCREMENT
 	DECREMENT
